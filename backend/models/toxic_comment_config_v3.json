@@ -1,0 +1,31 @@
+{
+    "model_version": "V3",
+    "languages": [
+        "English",
+        "Hindi",
+        "Hinglish"
+    ],
+    "excluded_languages": [
+        "Marathi"
+    ],
+    "model": "LogisticRegression",
+    "classifier_C": 2.0,
+    "word_ngram_range": [
+        1,
+        2
+    ],
+    "word_max_features": 350000,
+    "char_ngram_range": [
+        3,
+        5
+    ],
+    "char_max_features": 250000,
+    "threshold": 0.63,
+    "random_state": 42,
+    "accuracy": 0.9660209965991424,
+    "precision": 0.8364132081187519,
+    "recall": 0.8192878338278932,
+    "f1": 0.8277619547294258,
+    "roc_auc": 0.9842176069801408,
+    "benchmark_accuracy": 1.0
+}
