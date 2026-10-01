@@ -8,7 +8,7 @@ from ..posts_data import (
 )
 from ..database.firebase import (
     get_user_comments_for_post,
-    count_user_comments_for_post
+    get_all_approved_comments
 )
 from ..security import sanitize_id
 
@@ -18,19 +18,20 @@ router = APIRouter(prefix="/api", tags=["Posts"])
 def get_posts():
     """
     Retrieve photo posts directly from code,
-    with dynamic comment counts reflecting ONLY comments stored in Firebase Realtime Database.
+    with dynamic comment counts reflecting ONLY live comments in Firebase Realtime Database.
     """
     code_posts = get_code_posts()
+    comments_by_post = get_all_approved_comments()
     results = []
     for p in code_posts:
-        user_count = count_user_comments_for_post(p["id"])
+        count = len(comments_by_post.get(p["id"], []))
         results.append(
             PostModel(
                 id=p["id"],
                 image_url=p["image_url"],
                 caption=p["caption"],
                 like_count=p["like_count"],
-                comment_count=user_count,
+                comment_count=count,
                 created_at=p["created_at"]
             )
         )
