@@ -17,13 +17,12 @@ router = APIRouter(prefix="/api", tags=["Posts"])
 @router.get("/posts", response_model=List[PostModel])
 def get_posts():
     """
-    Retrieve default photo posts directly from code,
-    with dynamic comment counts reflecting comments stored in Firebase Realtime Database.
+    Retrieve photo posts directly from code,
+    with dynamic comment counts reflecting ONLY comments stored in Firebase Realtime Database.
     """
     code_posts = get_code_posts()
     results = []
     for p in code_posts:
-        default_count = len(get_default_comments_for_post(p["id"]))
         user_count = count_user_comments_for_post(p["id"])
         results.append(
             PostModel(
@@ -31,7 +30,7 @@ def get_posts():
                 image_url=p["image_url"],
                 caption=p["caption"],
                 like_count=p["like_count"],
-                comment_count=default_count + user_count,
+                comment_count=user_count,
                 created_at=p["created_at"]
             )
         )
@@ -40,8 +39,8 @@ def get_posts():
 @router.get("/posts/{post_id}/comments", response_model=List[CommentModel])
 def get_post_comments(post_id: int):
     """
-    Retrieve approved comments for a specific post.
-    Combines default code comments with approved comments from Firebase Realtime Database.
+    Retrieve approved comments for a specific post directly from Firebase Realtime Database.
+    If comments are deleted from the database, they will NOT appear here.
     """
     valid_id = sanitize_id(post_id)
     post = get_code_post_by_id(valid_id)
@@ -51,13 +50,8 @@ def get_post_comments(post_id: int):
             detail="Post not found."
         )
 
-    # 1. Default initial comments directly from code
-    default_comments = get_default_comments_for_post(valid_id)
-
-    # 2. Approved user comments stored in Firebase Realtime Database
+    # Fetch approved user comments stored in Firebase Realtime Database ONLY
     user_comments = get_user_comments_for_post(valid_id)
-
-    combined = list(default_comments) + list(user_comments)
 
     return [
         CommentModel(
@@ -69,5 +63,5 @@ def get_post_comments(post_id: int):
             status=c["status"],
             created_at=c["created_at"]
         )
-        for c in combined
+        for c in user_comments
     ]
