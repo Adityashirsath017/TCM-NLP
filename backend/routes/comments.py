@@ -37,7 +37,11 @@ def create_comment(req: CommentCreateRequest):
             probability=prediction["probability"],
             status="blocked",
             message=prediction["message"],
-            comment=None
+            comment=None,
+            prediction=prediction.get("prediction", "Toxic"),
+            toxic_probability=prediction.get("toxic_probability", prediction["probability"]),
+            threshold=prediction.get("threshold", 0.20),
+            model=prediction.get("model", "ToxicGuard-MuRIL")
         )
 
     # Non-toxic: Save approved comment to database
@@ -64,5 +68,9 @@ def create_comment(req: CommentCreateRequest):
         probability=prediction["probability"],
         status="approved",
         message="Comment is non-toxic",
-        comment=new_comment
+        comment=new_comment,
+        prediction=prediction.get("prediction", "Non-Toxic"),
+        toxic_probability=prediction.get("toxic_probability", prediction["probability"]),
+        threshold=prediction.get("threshold", 0.20),
+        model=prediction.get("model", "ToxicGuard-MuRIL")
     )

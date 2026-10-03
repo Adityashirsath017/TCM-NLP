@@ -28,11 +28,24 @@ class CommentCreateResponse(BaseModel):
     status: str
     message: str
     comment: Optional[CommentModel] = None
+    prediction: Optional[str] = None
+    toxic_probability: Optional[float] = None
+    threshold: Optional[float] = None
+    model: Optional[str] = None
 
 class PredictRequest(BaseModel):
-    comment: str = Field(..., description="Comment to analyze for toxicity")
+    text: Optional[str] = Field(None, description="Comment text to analyze")
+    comment: Optional[str] = Field(None, description="Alternative field for comment text")
 
 class PredictResponse(BaseModel):
+    success: bool = True
+    text: str
+    prediction: str
+    label: int
+    toxic_probability: float
+    non_toxic_probability: float
+    threshold: float = 0.20
+    model: str = "ToxicGuard-MuRIL"
     toxic: bool
     probability: float
     status: str

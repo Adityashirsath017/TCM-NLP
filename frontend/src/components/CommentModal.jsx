@@ -20,6 +20,7 @@ export default function CommentModal({
   setToxicAlert,
   toxicCount = 1,
   safeCount = 1,
+  lastPrediction = null,
   successMessage,
   errorMessage,
   setErrorMessage
@@ -110,11 +111,11 @@ export default function CommentModal({
           {isAnalyzing && <LoadingState />}
 
           {toxicAlert && (
-            <ToxicAlert onTryAgain={handleTryAgain} toxicCount={toxicCount} />
+            <ToxicAlert onTryAgain={handleTryAgain} toxicCount={toxicCount} lastPrediction={lastPrediction} />
           )}
 
           {successMessage && (
-            <SafeAlert safeCount={safeCount} />
+            <SafeAlert safeCount={safeCount} lastPrediction={lastPrediction} />
           )}
 
           {errorMessage && (

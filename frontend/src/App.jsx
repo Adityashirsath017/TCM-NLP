@@ -21,6 +21,7 @@ export default function App() {
   const [toxicAlert, setToxicAlert] = useState(false);
   const [toxicCount, setToxicCount] = useState(0);
   const [safeCount, setSafeCount] = useState(0);
+  const [lastPrediction, setLastPrediction] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -99,6 +100,15 @@ export default function App() {
     try {
       const result = await submitComment(selectedPost.id, trimmed);
 
+      const predictionInfo = {
+        text: trimmed,
+        prediction: result.prediction || (result.toxic ? 'Toxic' : 'Non-Toxic'),
+        toxic_probability: result.toxic_probability ?? result.probability ?? 0,
+        threshold: result.threshold || 0.20,
+        model: result.model || 'ToxicGuard-MuRIL'
+      };
+      setLastPrediction(predictionInfo);
+
       if (result.toxic || result.status === 'blocked') {
         // Toxic comment blocked!
         setToxicCount((prev) => prev + 1);
@@ -129,7 +139,9 @@ export default function App() {
     } catch (err) {
       console.error('Comment submission error:', err);
       if (err.response && err.response.data && err.response.data.detail) {
-        setErrorMessage(err.response.data.detail);
+        setErrorMessage(typeof err.response.data.detail === 'string' ? err.response.data.detail : (err.response.data.detail?.error || 'Unable to post comment.'));
+      } else if (err.response && err.response.data && err.response.data.error) {
+        setErrorMessage(err.response.data.error);
       } else {
         setErrorMessage('⚠️ Unable to analyze comment. Please try again.');
       }
@@ -164,6 +176,7 @@ export default function App() {
         setToxicAlert={setToxicAlert}
         toxicCount={toxicCount}
         safeCount={safeCount}
+        lastPrediction={lastPrediction}
         successMessage={successMessage}
         errorMessage={errorMessage}
         setErrorMessage={setErrorMessage}

@@ -1,34 +1,53 @@
 import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 
-export default function SafeAlert({ safeCount = 1 }) {
-  // Logic as requested:
-  // 1st non-toxic comment -> Daya Bhabhi ("Hey Maa Mataji!")
-  // 2nd non-toxic comment -> Hathi Bhai ("Sahi baat hai!")
-  // Subsequent comments cycle: Daya Bhabhi -> Hathi Bhai -> Daya Bhabhi...
+export default function SafeAlert({ safeCount = 1, lastPrediction = null }) {
+  // Logic:
+  // 1st non-toxic comment -> Daya Bhabhi
+  // 2nd non-toxic comment -> Hathi Bhai
   const isHathiBhai = safeCount % 2 === 0;
+
+  const toxicProb = lastPrediction?.toxic_probability ?? 0.01;
+  const toxicPercent = Math.round(toxicProb * 100);
 
   const meme = isHathiBhai
     ? {
         src: '/images/safe_meme_1.png',
-        alt: 'Dr. Hathi: Sahi baat hai',
-        caption: 'Dr. Hathi: "Sahi baat hai! Ekdum badhiya comment!" 💉😄'
+        alt: 'Dr. Hathi: Wonderful comment',
+        caption: 'Dr. Hathi: "That\'s right! Wonderful and respectful comment!" 💉😄'
       }
     : {
         src: '/images/safe_daya.png',
-        alt: 'Daya Bhabhi: Hey Maa Mataji',
-        caption: 'Daya Bhabhi: "Hey Maa Mataji! Tapu ke papa dekho kitna sundar comment kiya hai!" 🙏💃'
+        alt: 'Daya Bhabhi: Great comment',
+        caption: 'Daya Bhabhi: "Oh wonderful! What a great comment!" 🙏💃'
       };
 
   return (
     <div className="safe-alert-card" role="status">
       <div className="safe-alert-header">
         <CheckCircle2 size={18} />
-        <span>✅ Comment Approved & Posted!</span>
+        <span>✅ Comment Approved &amp; Posted!</span>
+      </div>
+
+      <div style={{
+        margin: '10px 0',
+        padding: '10px 14px',
+        background: '#ECFDF5',
+        border: '1px solid #A7F3D0',
+        borderRadius: '8px',
+        textAlign: 'left'
+      }}>
+        <div style={{ fontWeight: 700, color: '#047857', fontSize: '0.95rem' }}>
+          Result: ✓ Non-Toxic
+        </div>
+        <div style={{ color: '#374151', fontSize: '0.875rem', marginTop: '4px' }}>
+          Toxic Probability: <strong style={{ color: '#047857' }}>{toxicPercent}%</strong>
+          <span style={{ fontSize: '0.75rem', color: '#6B7280', marginLeft: '6px' }}>(Threshold: {lastPrediction?.threshold ?? 0.20})</span>
+        </div>
       </div>
 
       <p className="safe-alert-message">
-        Aapka comment safe paya gaya aur feed mein publish ho chuka hai.
+        Your comment is safe and has been published to the feed.
       </p>
 
       {/* Exactly 1 meme image displayed according to condition */}

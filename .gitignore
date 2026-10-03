@@ -10,6 +10,15 @@ ENV/
 *.db
 *.sqlite3
 
+# Models and Large Binary Weights
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.pkl
+backend/models/toxic_comment_*
+backend/models/ToxicGuard_MuRIL_Final/model.safetensors
+
 # Environment and Secrets (CRITICAL SECURITY)
 .env
 *.env
@@ -28,3 +37,4 @@ dist/
 Thumbs.db
 .vscode/
 .idea/
+backup/

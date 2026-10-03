@@ -47,7 +47,8 @@ export const submitComment = async (postId, comment) => {
  */
 export const predictComment = async (comment) => {
   const response = await apiClient.post('/api/predict', {
-    comment,
+    text: comment,
+    comment: comment,
   });
   return response.data;
 };
