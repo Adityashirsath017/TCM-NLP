@@ -128,11 +128,189 @@ body {
 
 /* Feed Container */
 .feed-container {
-  padding: 14px 14px 40px 14px;
+  padding: 10px 14px 28px 14px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
   flex: 1;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Story-style Progress Indicator Bar */
+.feed-story-indicators {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.feed-story-dot {
+  flex: 1;
+  height: 3px;
+  background-color: #E2E8F0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.feed-story-dot:hover {
+  background-color: #CBD5E1;
+}
+
+.feed-story-dot.active {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-hover) 100%);
+  height: 4px;
+  box-shadow: 0 0 8px rgba(108, 92, 231, 0.4);
+}
+
+/* Top Status Row */
+.feed-top-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+.feed-post-counter {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
+}
+
+.feed-swipe-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--primary);
+  background-color: var(--primary-light);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Horizontal Carousel Viewport */
+.carousel-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  touch-action: pan-y pinch-zoom;
+}
+
+.carousel-track {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  max-width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* Floating Navigation Chevrons */
+.carousel-nav-btn {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.carousel-nav-btn:hover {
+  background: #FFFFFF;
+  color: var(--primary);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 6px 18px rgba(108, 92, 231, 0.25);
+}
+
+.carousel-nav-btn:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.carousel-nav-btn.prev-btn {
+  left: 10px;
+}
+
+.carousel-nav-btn.next-btn {
+  right: 10px;
+}
+
+/* Bottom Swipe-Up Hint */
+.feed-bottom-hint {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swipe-up-trigger-pill {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.08) 0%, rgba(139, 92, 246, 0.12) 100%);
+  border: 1.5px dashed rgba(108, 92, 231, 0.4);
+  color: var(--primary);
+  padding: 10px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 42px;
+}
+
+.swipe-up-trigger-pill:hover {
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.15) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.18);
+}
+
+.hint-comment-bubble {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Bounce Chevron Animation */
+@keyframes bounceChevron {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.bounce-chevron, .bounce-chevron-icon {
+  animation: bounceChevron 1.6s ease-in-out infinite;
 }
 
 /* Post Card */

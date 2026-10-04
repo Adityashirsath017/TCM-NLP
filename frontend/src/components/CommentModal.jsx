@@ -26,6 +26,24 @@ export default function CommentModal({
   setErrorMessage
 }) {
   const inputRef = useRef(null);
+  const dragStartY = useRef(0);
+  const dragCurrentY = useRef(0);
+
+  const handleDragStart = (e) => {
+    dragStartY.current = e.touches ? e.touches[0].clientY : e.clientY;
+    dragCurrentY.current = dragStartY.current;
+  };
+
+  const handleDragMove = (e) => {
+    dragCurrentY.current = e.touches ? e.touches[0].clientY : e.clientY;
+  };
+
+  const handleDragEnd = () => {
+    // If pulled down by more than 50px, close drawer
+    if (dragCurrentY.current - dragStartY.current > 50) {
+      onClose();
+    }
+  };
 
   // Close on Escape key & manage body scroll
   useEffect(() => {
@@ -77,13 +95,24 @@ export default function CommentModal({
       aria-labelledby="comments-sheet-title"
     >
       <div className="sheet-container">
-        {/* Mobile drag handle */}
-        <div className="sheet-drag-handle-wrapper" aria-hidden="true">
+        {/* Mobile drag handle with pull-down to close */}
+        <div
+          className="sheet-drag-handle-wrapper"
+          aria-hidden="true"
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+        >
           <div className="sheet-drag-handle" />
         </div>
 
         {/* Sheet Header */}
-        <div className="sheet-header">
+        <div
+          className="sheet-header"
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+        >
           <div className="sheet-header-left">
             <h2 id="comments-sheet-title" className="sheet-title">Comments</h2>
             <span className="sheet-count">({comments.length})</span>

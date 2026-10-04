@@ -8,6 +8,7 @@ export default function App() {
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
   const [postsError, setPostsError] = useState(null);
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
 
   // Selected post and modal state
   const [selectedPost, setSelectedPost] = useState(null);
@@ -46,6 +47,7 @@ export default function App() {
 
   // Open comments for a specific post
   const handleOpenComments = async (post) => {
+    if (!post) return;
     setSelectedPost(post);
     setIsModalOpen(true);
     setComments([]);
@@ -160,6 +162,9 @@ export default function App() {
         error={postsError}
         onOpenComments={handleOpenComments}
         onRetry={loadPosts}
+        isModalOpen={isModalOpen}
+        currentIndex={currentPostIndex}
+        setCurrentIndex={setCurrentPostIndex}
       />
 
       <CommentModal

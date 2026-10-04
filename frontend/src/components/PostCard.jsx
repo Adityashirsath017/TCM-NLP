@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, MessageCircle } from 'lucide-react';
+import { Heart, MessageCircle, ChevronUp } from 'lucide-react';
 
 export default function PostCard({ post, onOpenComments }) {
   return (
@@ -30,13 +30,13 @@ export default function PostCard({ post, onOpenComments }) {
 
         <button
           type="button"
-          className="view-comments-btn"
+          className="view-comments-btn swipe-up-action-btn"
           id={`view-comments-btn-${post.id}`}
           onClick={() => onOpenComments(post)}
           aria-label={`View comments for ${post.caption}`}
         >
-          <MessageCircle size={16} />
-          <span>View Comments</span>
+          <ChevronUp size={18} className="bounce-chevron-icon" />
+          <span>View Comments ({post.comment_count})</span>
         </button>
       </div>
     </article>
