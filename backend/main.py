@@ -82,19 +82,19 @@ if os.path.exists(static_dir):
 @app.get("/api/health", tags=["Health"])
 @app.get("/health", tags=["Health"])
 def health_check():
-    from .model_loader import get_threshold, is_model_loaded, get_device
+    hf_url = os.environ.get("HUGGINGFACE_SPACE_URL", "https://riocoder-toxicguard-muril-api.hf.space")
     return {
         "status": "healthy",
         "model_name": "ToxicGuard MuRIL Context-Aware Toxicity Classifier",
         "base_model": "google/muril-base-cased",
         "model_version": "MuRIL-Final",
-        "threshold": get_threshold(),
+        "threshold": 0.20,
         "database": "firebase_realtime_database",
         "security": "enabled",
         "app": "Toxic Comment Detection",
-        "model_loaded": is_model_loaded(),
-        "device": str(get_device()),
-        "version": "4.0.0"
+        "inference_engine": "Hugging Face ZeroGPU Space" if hf_url else "Local PyTorch",
+        "huggingface_space_url": hf_url,
+        "version": "4.1.0"
     }
 
 if __name__ == "__main__":

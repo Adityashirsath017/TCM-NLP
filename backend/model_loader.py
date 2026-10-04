@@ -1,7 +1,14 @@
 from pathlib import Path
 import os
-import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+try:
+    import torch
+    from transformers import AutoTokenizer, AutoModelForSequenceClassification
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
+    torch = None
+    AutoTokenizer = None
+    AutoModelForSequenceClassification = None
 
 # Base directory for backend
 BASE_DIR = Path(__file__).resolve().parent
@@ -15,9 +22,11 @@ _device = None
 _is_loaded = False
 
 
-def get_device() -> torch.device:
+def get_device():
     """Return the active compute device (cuda if available, else cpu)."""
     global _device
+    if not HAS_TORCH:
+        return "cpu"
     if _device is None:
         _device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     return _device
